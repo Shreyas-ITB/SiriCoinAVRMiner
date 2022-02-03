@@ -5,6 +5,9 @@ from time import sleep
 import colorama
 from colorama import Fore
 from pythonping import ping
+import configparser
+import os
+from os import path, mkdir
 
 colorama.init(autoreset=True)
 def address(addr):
@@ -16,12 +19,11 @@ def address(addr):
 node = ("1.0 Public Beta Release")
 miner = ("1.0 Public Beta Release")
 
-if __name__ == "__main__":
-    sc = input(f"[SC] {Fore.YELLOW}Enter your SiriCoin MetaMask Address: ")
-    address(sc)
-    sleep(2)
-    i = input(f"[SYS] {Fore.YELLOW}Enter your Arduino Com Port: ")
-    sleep(2)
+CONFIG_DIR = "config"
+wallet = ""
+port = ""
+
+def startMining():
     print(f"""
     {Fore.BLUE}SiriCoin CryptoCurrency AVR Miner 2021-2022
     {Fore.BLUE}AVR Algorithm: DataHash Created by Shreyas-ITB
@@ -29,14 +31,14 @@ if __name__ == "__main__":
     {Fore.YELLOW}Discord Server: https://discord.gg/6EGmgNWD9R
     {Fore.MAGENTA}DataHashNode Version: {Fore.YELLOW}{node}
     {Fore.MAGENTA}SiriCoin AVRMiner Version: {Fore.YELLOW}{miner}
-    {Fore.GREEN}Your SiriCoin Address: {sc}
+    {Fore.GREEN}Your SiriCoin Address: {wallet}
     """)
     sleep(3)
     print (f"[SYS] {Fore.GREEN}Starting SiriCoin AVRMiner. With DataHash Algorithm.")
     sleep(3)
     while True:
         try:
-            ser  = serial.Serial(f"{i}", baudrate=115200, timeout=2.5)
+            ser  = serial.Serial(f"{port}", baudrate=115200, timeout=2.5)
             print(f"[AVR] {Fore.GREEN}Successfully Connected to AVR Device")
             sleep(2)
             print(f"[SYS] {Fore.YELLOW}Requesting Job from DataHash-Node")
@@ -79,3 +81,33 @@ if __name__ == "__main__":
         except serial.SerialException:
             print(f"[AVR] {Fore.RED}Error Connecting to AVR device Retrying in 3 seconds")
             sleep(3)
+
+if __name__ == "__main__":
+    if not path.exists(CONFIG_DIR):
+        mkdir(CONFIG_DIR)
+
+    if os.path.exists(CONFIG_DIR + '/settings.cfg'):
+        config = configparser.ConfigParser()
+        config.read(CONFIG_DIR + '/settings.cfg')
+        wallet = config['settings']['address']
+        address(wallet)
+        port = config['settings']['port1']
+        print(f"[SC] {Fore.GREEN}Found Config File...")
+        
+        startMining()
+    else:
+        print(f"[SC] {Fore.RED}No Config File Found...")
+        wallet = input(f"[SC] {Fore.GREEN} Please Enter Your SiriCoin Address: ")
+        address(wallet)
+        sleep(2)
+        port = input(f"[SYS] {Fore.YELLOW} Please enter your Arduino Com Port: ")
+        sleep(2)
+
+        config = configparser.ConfigParser()
+        config.add_section('settings')
+        config.set('settings', 'address', wallet)
+        config.set('settings', 'port1', port)
+        with open(CONFIG_DIR + '/settings.cfg', 'w') as configfile:
+            config.write(configfile)
+
+        startMining()
