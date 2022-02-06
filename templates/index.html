@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://jenil.github.io/bulmaswatch/darkly/bulmaswatch.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js" integrity="sha256-MAgcygDRahs+F/Nk5Vz387whB4kSK9NXlDN3w58LLq0=" crossorigin="anonymous"></script>
-    <script src="/script.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"
+        integrity="sha256-MAgcygDRahs+F/Nk5Vz387whB4kSK9NXlDN3w58LLq0=" crossorigin="anonymous"></script>
     <title>Siri DataHashNode</title>
     <link rel="icon" href="static/logo.png" type="image/png" />
     <link rel="shortcut icon" href="static/logo.png" type="image/png" />
@@ -21,7 +21,8 @@
                 <div class="box has-text-centered">
                     <p class="subtitle is-size-6">Welcome to</p>
                     <p class="title is-size-2 gradient-logo">
-                        <img src="https://cdn.discordapp.com/attachments/862241313672134696/939532556049727538/siri.png"></img>
+                        <img
+                            src="https://cdn.discordapp.com/attachments/862241313672134696/939532556049727538/siri.png"></img>
                         AVR DataHashNode
                     </p>
                     <p class="subtitle">
@@ -76,8 +77,10 @@
                         History
                     </p>
                     <p class="subtitle">
-                        This is SiriCoin DataHashNode for <b>SiriCoin</b> AVRMining node created by <b>Shreyas-ITB</b> from SiriCoin<br>
-                        It was launched at <b>5/2/2022</b> and helps giving jobs and accepting jobs by AVRminers like arduino miners, esp miners.
+                        This is SiriCoin DataHashNode for <b>SiriCoin</b> AVRMining node created by <b>Shreyas-ITB</b>
+                        from SiriCoin<br>
+                        It was launched at <b>5/2/2022</b> and helps giving jobs and accepting jobs by AVRminers like
+                        arduino miners, esp miners.
                     </p>
                 </div>
                 <div class="box">
@@ -85,11 +88,12 @@
                         <i class="fa fa-fw fa-book"></i>
                         mSiri AVR Wallet
                     </p>
-                    <form method="GET">
+                    <form id="getBalanceForm">
                         <label>Address</label>
-                        <input type="text" name="tag">
+                        <input type="text" name="address" id="address">
                         <button type="submit" value="Submit">Get Balance</button>
                     </form>
+                    <p id="balance"></p>
                 </div>
             </div>
         </div>
@@ -110,5 +114,6 @@
         </div>
     </footer>
 </body>
+<script src="static/script.js"></script>
 
 </html>

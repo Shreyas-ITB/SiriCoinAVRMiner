@@ -1,10 +1,26 @@
-from flask import Flask , jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request
 import random
-from flask_restful import Resource, Api
 import json
+from sqlite3 import connect as sqlconn
+from os import path, mkdir
+
+DATA_DIR = "data/"
+
+WALLETS_DATABASE = DATA_DIR + '/Wallets.db'
+
+if not path.exists(DATA_DIR): # if the folder data don`t exist, create it
+    mkdir(DATA_DIR)
+
+try: # if the database table don`t exist, create it
+    with sqlconn(WALLETS_DATABASE, timeout=30) as conn:
+        datab = conn.cursor()
+        datab.execute(
+            """CREATE TABLE IF NOT EXISTS wallets (address VARCHAR(255), balance REAL)""")
+        conn.commit()
+except Exception as e:
+    print(e)
 
 app = Flask(__name__)
-api = Api(app)
 Data =[]
 Addr =[]
 
@@ -39,54 +55,97 @@ def createData():
     HashData = random.choice(Hashlib)
     return HashData
 
-class JobSolved(Resource):
-    def post(self, job):
-        Data.append(job)
+@app.route('/acceptjob/<string:job>', methods=['POST'])
+def JobSolved(job):
+    if job is not None:
         try:
-           json.loads(f'{job}')
+            json.loads(f'{job}')
         except ValueError as e:
             return "(ERROR) Share Rejected. {May Be The Hash is not valid to accept}"
         return "Share Accepted!! (Verified Hash) Moving on..."
-api.add_resource(JobSolved, '/acceptjob/<string:job>')
-    
-def get_bank_data():
-    with open('db.json', 'r') as f:
-        users = json.load(f)
-
-    return users
+    else:
+        return "Share Rejected. {May Be The Hash is not valid to accept}"
 
 def open_account(addr):
-    users = get_bank_data()
-
-    if str(addr) in users:
-        return False
-    else:
-        users[str(addr)] = {}
-        users[str(addr)]["bal"] = 0
-
-    with open('db.json', 'w') as f:
-        json.dump(users, f)
-
+    try:
+        with sqlconn(WALLETS_DATABASE, timeout=30) as conn:
+            datab = conn.cursor()
+            datab.execute(
+                """SELECT * FROM wallets WHERE address = ?""", (addr,))
+            conn.commit()
+            if datab.fetchone() is None:
+                datab.execute(
+                    """INSERT INTO wallets (address, balance) VALUES (?, ?)""", (addr, 0))
+                conn.commit()
+                return True
+    except Exception as e:
+        print(e)
     return True
 
-def update_bank(addr, change=0, mode='bal'):
-    users = get_bank_data()
+def update_bank(addr, change=0):
+    bal = 0
+    try:
+        with sqlconn(WALLETS_DATABASE, timeout=30) as conn:
+            datab = conn.cursor()
+            datab.execute(
+                """UPDATE wallets SET balance = ? WHERE address = ?""", (change, addr))
+            conn.commit()
+    except Exception as e:
+        print(e)
+        try:
+            with sqlconn(WALLETS_DATABASE, timeout=30) as conn:
+                datab = conn.cursor()
+                datab.execute(
+                    """SELECT * FROM wallets WHERE address = ?""", (addr,))
+                conn.commit()
 
-    users[str(addr)][mode] += change
+                user = datab.fetchone()
 
-    with open('db.json', 'w') as f:
-        json.dump(users, f)
-    bal = users[str(addr)]['bal']
-    return bal
+                if user is None:
+                    return False
+                else:
+                    bal = user[1]
+        except Exception as e:
+            print(e)
+        return bal
 
-class getaddr(Resource):
-    def post(self, addr):
+@app.route('/getaddr/<string:addr>', methods=['POST'])
+def getAddr(addr):
+    if addr is not None:
         Addr.append(addr)
         open_account(addr)
-        update_bank(addr, 1, 'bal')
+        update_bank(addr, 1)
         return addr
-api.add_resource(getaddr, '/getaddr/<string:addr>')
+    else:
+        return "Error"
 
+@app.route('/api/getBalance', methods=['GET'])
+def getBalance():
+    try:
+        addr = str(request.args.get('address'))
+        if addr is not None:
+            bal = 0
+            try:
+                with sqlconn(WALLETS_DATABASE, timeout=30) as conn:
+                    datab = conn.cursor()
+                    datab.execute(
+                        """SELECT * FROM wallets WHERE address = ?""", (addr,))
+                    conn.commit()
+
+                    user = datab.fetchone()
+
+                    if user is None:
+                        return jsonify(result = "Error: your account don`t exist")
+                    else:
+                        bal = user[1]
+            except Exception as e:
+                print(e)
+            return jsonify(result = bal)
+        else:
+            return jsonify(result = "Error: your address isn`t valid")
+    except Exception as e:
+        print(e)
+        return jsonify(result = "Error fetching the address")
 
 if __name__ == '__main__':
     app.run(debug=True, host="localhost", port=10101)
