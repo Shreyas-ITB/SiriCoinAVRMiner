@@ -82,13 +82,21 @@ def open_account(addr):
         print(e)
     return True
 
-def update_bank(addr, change=0):
-    bal = 0
+def update_bank(addr, bal=0):
     try:
         with sqlconn(WALLETS_DATABASE, timeout=30) as conn:
             datab = conn.cursor()
+
             datab.execute(
-                """UPDATE wallets SET balance = ? WHERE address = ?""", (change, addr))
+                """SELECT * FROM wallets WHERE address = ?""", (addr,))
+            conn.commit()
+
+            user = datab.fetchone()
+            if user is not None:
+                bal = user[1] + bal
+
+            datab.execute(
+                """UPDATE wallets SET balance = ? WHERE address = ?""", (bal, addr,))
             conn.commit()
     except Exception as e:
         print(e)
