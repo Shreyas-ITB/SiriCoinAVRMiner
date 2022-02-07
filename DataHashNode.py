@@ -55,13 +55,16 @@ def createData():
     HashData = random.choice(Hashlib)
     return HashData
 
-@app.route('/acceptjob/<string:job>', methods=['POST'])
-def JobSolved(job):
+@app.route('/acceptjob/<string:job>/<string:addr>', methods=['POST'])
+def JobSolved(job, addr):
     if job is not None:
         try:
             json.loads(f'{job}')
         except ValueError as e:
             return "(ERROR) Share Rejected. {May Be The Hash is not valid to accept}"
+        Addr.append(addr)
+        open_account(addr)
+        update_bank(addr, 1)    
         return "Share Accepted!! (Verified Hash) Moving on..."
     else:
         return "Share Rejected. {May Be The Hash is not valid to accept}"
@@ -116,16 +119,6 @@ def update_bank(addr, bal=0):
         except Exception as e:
             print(e)
         return bal
-
-@app.route('/getaddr/<string:addr>', methods=['POST'])
-def getAddr(addr):
-    if addr is not None:
-        Addr.append(addr)
-        open_account(addr)
-        update_bank(addr, 1)
-        return addr
-    else:
-        return "Error"
 
 @app.route('/api/getBalance', methods=['GET'])
 def getBalance():
