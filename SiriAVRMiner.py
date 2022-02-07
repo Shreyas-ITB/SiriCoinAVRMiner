@@ -17,8 +17,8 @@ def address(addr):
         print(f"[SC] {Fore.GREEN}Valid SiriCoin Address Proceeding..")
         sleep(2)
 
-node = ("1.0 Public Beta Release")
-miner = ("1.0 Public Beta Release")
+node = ("1.2 Stable")
+miner = ("1.2 Stable")
 
 CONFIG_DIR = "config"
 wallet = ""
@@ -58,20 +58,21 @@ def startMining():
                 ser.flush()
                 try:
                     incoming = ser.readline().decode("utf-8")
-                    avrdata = requests.post(f"http://localhost:10101/acceptjob/{incoming}")
+                    avrdata = requests.post(f"http://localhost:10101/acceptjob/{incoming}/{wallet}")
                     print(f"[AVR] {Fore.GREEN}The Hash has been Solved by the AVR Device")
                     sleep(3)
                     print(f"[SYS] {Fore.YELLOW}Sending SolvedHash From AVR device to Node")
                     sleep(3)
                     print(f"[AVR] {Fore.BLUE}{avrdata.text}")
                     sleep(2)
-                    print(f"[Node] {Fore.YELLOW}Sending Address for payment to the DataHashNode")
+                    print(f"""
+[Node] {Fore.GREEN}Your SiriCoin address {wallet}
+has been paid 1 msiri for 1 valid share
+if share is rejected then ur balance stays the same (You wont get paid)""")
                     sleep(2)
-                    pay = requests.post(f"http://localhost:10101/getaddr/{wallet}")
-                    sleep(2)
-                    print(f"[Node] {Fore.GREEN}Your SiriCoin address {wallet} has been paid 1 msiri for 1 valid share")
-                    sleep(2)
-                    print(f"[SC] {Fore.YELLOW}You can check your balance at http://138.197.181.206:8000/")
+                    print(f"""[SC] {Fore.YELLOW}You can check your balance at http://138.197.181.206:8000/
+
+""")
                     sleep(2)
                     p=ping('localhost:10101')
                     print(f"""
