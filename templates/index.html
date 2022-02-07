@@ -18,7 +18,7 @@
     <section class="container">
         <div class="columns">
             <div class="column">
-                <div class="box has-text-centered">
+                <div class="box has-text-centered" style="margin-top: 40px; margin-bottom: 40px;">
                     <p class="subtitle is-size-6">Welcome to</p>
                     <p class="title is-size-2 gradient-logo">
                         <img
@@ -74,6 +74,18 @@
                 <div class="box">
                     <p class="title">
                         <i class="fa fa-fw fa-book"></i>
+                        mSiri AVR Wallet
+                    </p>
+                    <form class="has-text-centered" id="getBalanceForm">
+                        <label class="is-size-5"><B>Input Your Address:</B></label> <br>
+                        <input style="margin-bottom: 10px; margin-top: 10px;" type="text" name="address" id="address"> <br>
+                        <button class="button is-size-5 is-rounded is-outlined is-success" type="submit" value="Submit"><B>Get Balance</B></button>
+                    </form>
+                    <p id="balance"></p>
+                </div>
+                <div class="box">
+                    <p class="title">
+                        <i class="fa fa-fw fa-book"></i>
                         History
                     </p>
                     <p class="subtitle">
@@ -83,33 +95,16 @@
                         arduino miners, esp miners.
                     </p>
                 </div>
-                <div class="box">
-                    <p class="title">
-                        <i class="fa fa-fw fa-book"></i>
-                        mSiri AVR Wallet
-                    </p>
-                    <form id="getBalanceForm">
-                        <label>Address</label>
-                        <input type="text" name="address" id="address">
-                        <button type="submit" value="Submit">Get Balance</button>
-                    </form>
-                    <p id="balance"></p>
-                </div>
             </div>
         </div>
     </section>
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
-    <br><br>
     <br><br>
     <br><br>
     <footer>
         <div class="content has-text-centered">
             <p>
                 Designed by <b>Shreyas-ITB</b> from SiriCoin Team 2021-2022<br>
-                Made with <a href="https://bulma.io"><b>Bulma</b></a>
+                Made with <a href="https://bulma.io"><b>Bulma.</b></a> You can Imporve this website <a href="https://github.com/Sanjaysandy/SiriCoinWebWallet"><b>Here.</b></a>
             </p>
         </div>
     </footer>
