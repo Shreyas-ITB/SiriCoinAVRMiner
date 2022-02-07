@@ -45,7 +45,7 @@ def startMining():
             print(f"[SYS] {Fore.YELLOW}Requesting Job from DataHash-Node")
             sleep(2)
             try:
-                req = requests.get("http://localhost:10101/createData")
+                req = requests.get("http://138.197.181.206:8000/createData")
                 print(f"[SYS] {Fore.GREEN}Successfully Connected to DataHashNode")
                 sleep(2)
                 data = {}
@@ -58,7 +58,7 @@ def startMining():
                 ser.flush()
                 try:
                     incoming = ser.readline().decode("utf-8")
-                    avrdata = requests.post(f"http://localhost:10101/acceptjob/{incoming}/{wallet}")
+                    avrdata = requests.post(f"http://138.197.181.206:8000/acceptjob/{incoming}/{wallet}")
                     print(f"[AVR] {Fore.GREEN}The Hash has been Solved by the AVR Device")
                     sleep(3)
                     print(f"[SYS] {Fore.YELLOW}Sending SolvedHash From AVR device to Node")
@@ -74,7 +74,7 @@ if share is rejected then ur balance stays the same (You wont get paid)""")
 
 """)
                     sleep(2)
-                    p=ping('localhost:10101')
+                    p=ping('138.197.181.206')
                     print(f"""
 [Node] {Fore.MAGENTA}DataHash Algo Works a bit different The Lower the Hashrate the Faster You recieve jobs.
 {Fore.MAGENTA}Your AVR's Average Hashrate: {p.rtt_avg_ms}H/s
