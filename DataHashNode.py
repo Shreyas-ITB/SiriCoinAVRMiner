@@ -142,7 +142,7 @@ def getBalance():
                     if user is None:
                         return jsonify(result = "Error: your account don`t exist")
                     else:
-                        bal = (f"You Mined {user[1]} Micro SiriCoins")
+                        bal = (f"You Mined {user[1]} Micro SiriCoin(s)")
             except Exception as e:
                 print(e)
             return jsonify(result = bal)
