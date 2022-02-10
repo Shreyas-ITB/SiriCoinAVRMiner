@@ -18,8 +18,8 @@ def address(addr):
         print(f"[SC] {Fore.GREEN}Valid SiriCoin Address Proceeding..")
         sleep(2)
 
-node = ("1.2 Stable")
-miner = ("1.2 Stable")
+node = ("1.3 Stable")
+miner = ("1.3 Stable")
 
 CONFIG_DIR = "config"
 wallet = ""
