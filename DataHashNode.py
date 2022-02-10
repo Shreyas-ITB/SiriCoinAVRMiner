@@ -124,27 +124,33 @@ def acceptjob(job, addr):
         return jsonify(success=False, error="unknown")
 
 
-@app.route("/api/getBalance")
+@app.route('/api/getBalance', methods=['GET'])
 def getBalance():
     try:
         addr = str(request.args.get('address'))
         if addr is not None:
-            with sqlconn(WALLETS_DATABASE, timeout=30) as conn:
-                db = conn.cursor()
-                db.execute("SELECT balance FROM wallets WHERE address = (?)", (addr,))
-                conn.commit()
+            bal = 0
+            try:
+                with sqlconn(WALLETS_DATABASE, timeout=30) as conn:
+                    datab = conn.cursor()
+                    datab.execute(
+                        """SELECT * FROM wallets WHERE address = ?""", (addr,))
+                    conn.commit()
 
-                user = db.fetchone()
+                    user = datab.fetchone()
 
-                if user is None:
-                    return jsonify(success=False, error="no user")
-
-                return jsonify(success=True, balance=user[0])
+                    if user is None:
+                        return jsonify(result = "Error: your account don`t exist")
+                    else:
+                        bal = (f"You Mined {user[1]} Micro SiriCoins")
+            except Exception as e:
+                print(e)
+            return jsonify(result = bal)
         else:
-            return jsonify(success=False, error="address")
+            return jsonify(result = "Error: your address isn`t valid")
     except Exception as e:
         print(e)
-        return jsonify(success=False, error="unknown")
+        return jsonify(result = "Error fetching the address")
 
 if __name__ == "__main__":
     app.run(debug=True, host="localhost", port=10101)
