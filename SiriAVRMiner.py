@@ -54,8 +54,7 @@ def startMining():
                 print(f"[SYS] {Fore.GREEN}Successfully Connected to DataHashNode")
                 load = json.loads(req.text)
                 job = load['job']
-                data = {}
-                data["operation"] = f"{job}"
+                data = {'operation': f"{job}"}
                 data = json.dumps(data) + "*"
                 print(f"[SYS] {Fore.GREEN}Got Master Hash From DataHashNode")
                 ser.write(data.encode('ascii'))
@@ -84,7 +83,6 @@ if Share is rejected then Your balance stays the same (You wont get paid)""")
 """)
                 except Exception as e:
                     print(e)
-                    pass
                 ser.close()
             except requests.exceptions.ConnectionError:
                 print(f"[SYS] {Fore.RED}Error Connecting To AVR DataHash Node Retrying in 3 seconds")
@@ -104,8 +102,7 @@ if __name__ == "__main__":
         address(wallet)
         port = config['settings']['port1']
         print(f"[SC] {Fore.GREEN}Found Config File...")
-        
-        startMining()
+
     else:
         print(f"[SC] {Fore.RED}No Config File Found...")
         wallet = input(f"[SC] {Fore.GREEN} Please Enter Your SiriCoin Address: ")
@@ -118,7 +115,8 @@ if __name__ == "__main__":
         config.add_section('settings')
         config.set('settings', 'address', wallet)
         config.set('settings', 'port1', port)
-        with open(CONFIG_DIR + '/settings.cfg', 'w') as configfile:
+        with open(f'{CONFIG_DIR}/settings.cfg', 'w') as configfile:
             config.write(configfile)
 
-        startMining()
+
+    startMining()
