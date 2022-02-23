@@ -9,7 +9,7 @@ from os import path, mkdir
 BALERROR = "balance-error"
 DATA_DIR = "data/"
 
-WALLETS_DATABASE = DATA_DIR + '/Wallets.db'
+WALLETS_DATABASE = f'{DATA_DIR}/Wallets.db'
 
 if not path.exists(DATA_DIR): # if the folder data don`t exist, create it
     mkdir(DATA_DIR)
@@ -99,26 +99,25 @@ def createData(addr):
 @app.route("/acceptjob/<string:job>/<string:addr>")
 def acceptjob(job, addr):
     try:
-        if job is not None and addr is not None:
-            with sqlconn(WALLETS_DATABASE, timeout=30) as conn:
-                    db = conn.cursor()
-                    db.execute("SELECT job, time FROM wallets WHERE address = (?)", (addr,))
-                    user = db.fetchone()
-                    if user == None or user[0] == "":
-                        return jsonify(success=False, error="nojob:account")
-                    
-                    if int(user[1]) + 25 < int(time.time()):
-                        if user[0] == job:
-                            db.execute("UPDATE wallets SET job = '' WHERE address = (?)", (addr,))
-                            conn.commit()
-                            update_bank(addr, 1)
-                            return ("success=True Share Accepted! Moving On..")
-                        else:
-                            return jsonify(success=False, error="jobwrong")
-                    else:
-                        return jsonify(success=False, error="time")
-        else:
+        if job is None or addr is None:
             return jsonify(success=False, error="job:addrmissing")
+        with sqlconn(WALLETS_DATABASE, timeout=30) as conn:
+            db = conn.cursor()
+            db.execute("SELECT job, time FROM wallets WHERE address = (?)", (addr,))
+            user = db.fetchone()
+            if user is None or user[0] == "":
+                return jsonify(success=False, error="nojob:account")
+
+            if int(user[1]) + 25 < int(time.time()):
+                if user[0] == job:
+                    db.execute("UPDATE wallets SET job = '' WHERE address = (?)", (addr,))
+                    conn.commit()
+                    update_bank(addr, 1)
+                    return ("success=True Share Accepted! Moving On..")
+                else:
+                    return jsonify(success=False, error="jobwrong")
+            else:
+                return jsonify(success=False, error="time")
     except Exception as e:
         print(e)
         return jsonify(success=False, error="unknown")
@@ -128,26 +127,25 @@ def acceptjob(job, addr):
 def getBalance():
     try:
         addr = str(request.args.get('address'))
-        if addr is not None:
-            bal = 0
-            try:
-                with sqlconn(WALLETS_DATABASE, timeout=30) as conn:
-                    datab = conn.cursor()
-                    datab.execute(
-                        """SELECT * FROM wallets WHERE address = ?""", (addr,))
-                    conn.commit()
-
-                    user = datab.fetchone()
-
-                    if user is None:
-                        return jsonify(result = "Error: your account don`t exist")
-                    else:
-                        bal = (f"You Mined {user[1]} Micro SiriCoin(s)")
-            except Exception as e:
-                print(e)
-            return jsonify(result = bal)
-        else:
+        if addr is None:
             return jsonify(result = "Error: your address isn`t valid")
+        bal = 0
+        try:
+            with sqlconn(WALLETS_DATABASE, timeout=30) as conn:
+                datab = conn.cursor()
+                datab.execute(
+                    """SELECT * FROM wallets WHERE address = ?""", (addr,))
+                conn.commit()
+
+                user = datab.fetchone()
+
+                if user is None:
+                    return jsonify(result = "Error: your account don`t exist")
+                else:
+                    bal = (f"You Mined {user[1]} Micro SiriCoin(s)")
+        except Exception as e:
+            print(e)
+        return jsonify(result = bal)
     except Exception as e:
         print(e)
         return jsonify(result = "Error fetching the address")
