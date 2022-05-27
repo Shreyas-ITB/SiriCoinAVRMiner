@@ -1,0 +1,25 @@
+If you have ESP board (Esp-8266 or Esp-32), Arduino-Mega then please upload the Arduino code located in AVRCode-Optimised Folder
+
+Full Path: SiriCoinAVRMiner\AVRCode-Optimised\SerialMiner-Opt\SerialMiner-Opt.ino
+
+If you have Arduino-UNO or Arduino Nano, Micro, Mini then please upload the Arduino code located in AVRCode Folder
+
+Full Path: SiriCoinAVRMiner\AVRCode\SerialMiner\SerialMiner.ino
+
+
+The Reason for Code splitting (2 different codes for AVRs) is because the bigger boards like ESP boards or Arduino Mega Boards consist
+more than 4K bytes of memory which lets us to upload the optimised code and there by it gives us a little bit more hashrate than the non optimised code
+while the other boards like UNO or Nano even micro and mini consists less than 4K bytes of memory and they cant be flashed with the optimised code as Keccak
+initialisation needs atleast 4,000 bytes. Hence giving us a little bit less hashrate but it lets us mine on the low mem boards too.
+
+You can view the images in AVR Hashrates folder which lets you know about the hashrates in different boards..
+
+(Beta Mining)
+
+If you want to test ESP wifi mining on a beta pool, You can upload the ESPonBetaPool.ino to your ESP board but first you need to add your wifi network name and
+password in the line where it says SSID and Password.. If you open the serial monitor you can see the esp mining.. Note that the Pool made by Ridimuim is still in
+beta so if any errors or any issues please report it in the discord community.. Thanks
+
+Full Path: C:\Users\shrey\Downloads\SiriCoinAVRMiner\ESP Pool Mining (Beta)\ESPonBetaPool.ino
+
+Code Developed by Ridimuim and Shreyas-ITB
