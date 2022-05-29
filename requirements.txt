@@ -1,8 +1,0 @@
-eth_account==0.5.7
-pypresence==4.2.1
-pyserial==3.5
-requests==2.22.0
-rich==12.4.4
-termcolor==1.1.0
-web3==5.29.1
-wget==3.2
