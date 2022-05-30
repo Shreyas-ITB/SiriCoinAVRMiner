@@ -10,5 +10,6 @@ This is SiriCoin AVR Miner which mines siricoin on AVR devices like arduino, esp
 | STM-32 / Bluepill  | 2.01 KH/s  |
 | ATmega2560 / Arduino MEGA  | 51 H/s  |
 | ATmega328 / Arduino UNO  | 30 H/s  |
+| RP2040 / Raspberry Pi Pico  | 1.15 KH/s  |
 
 (Algo: Keccak)
