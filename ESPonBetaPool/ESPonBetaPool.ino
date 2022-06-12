@@ -34,12 +34,12 @@
 
 #define ddebug2 
 
-/* SiriCoin Address */
-const String siriAddress = "0x4D4279faB369Cc551FF1e8BECE01DC1dD2644794";
+/* Replace this whole <YOUR SIRICOIN ADDRESS> with your actual siricoin address then save the file */
+const String siriAddress = "<YOUR SIRICOIN ADDRESS>";
 
 /* wifi settings */
-const char* SSID = "ShreyasITB";
-const char* PASSWORD = "air47169";
+const char* SSID = "<YOUR WIFI NAME (SSID)>";
+const char* PASSWORD = "<YOUR WIFI PASSWORD>";
 
 /* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-    Advanced Settings   -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- */
 
