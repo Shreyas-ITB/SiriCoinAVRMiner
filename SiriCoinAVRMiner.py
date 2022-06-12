@@ -30,7 +30,7 @@ def getsavedhashrate():
             rpc = Presence("972449607235821569")
             rpc.connect()
             rpc.update(state=f"AVRD Hashing at: {lvh}", details="Mining SiriCoin with my AVRs", large_image="smallimage", small_image="logo", buttons=[{"label": "Get Started with SiriCoin", "url": "https://siricoin.tech"}, {"label": "Join SiriCoin Server", "url": "https://discord.gg/UfmaKSBDfa"}], start=time.time())
-        except pypresence.exceptions.DiscordError or pypresence.exceptions.DiscordNotFound:
+        except pypresence:
             return ("Discord RPC Disabled...")
             
 
